@@ -1,2 +1,3 @@
-# nodejs-rabbitmq-tutorial
-RabbitMq tutorials implementation for nodeJS
+# RabbitMQ tutorials implementstion for NodeJS
+
+** To get dependencies use NPM from root proj directory **
