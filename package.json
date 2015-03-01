@@ -1,0 +1,21 @@
+{
+  "name": "jRabbitAmqpTutorial1",
+  "description": "RabbitMQ tutorials implementstion for nodeJS",
+  "tags": [
+    "NodeJS",
+    "RabbitMQ",
+    "Tutorials"
+  ],
+  "version": "0.0.1",
+  "author": {
+    "name": "Ivan Boroday",
+    "email": "johnComUa@gmail.com"
+  },
+  "engines": [
+    "node >= 0.10.0"
+  ],
+  "dependencies": {
+    "amqp": "*"
+  },
+  "devDependencies": {}
+}
