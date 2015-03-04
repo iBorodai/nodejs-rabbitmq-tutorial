@@ -11,7 +11,9 @@ connection.on( 'ready' , function (){
 	connection.publish(
 		'task_queue',
 		data,
-		{ deliveryMode:2 } //make message persistent
+		{
+			deliveryMode:2  //make message persistent
+    }
 	);
   console.log('message published');
 

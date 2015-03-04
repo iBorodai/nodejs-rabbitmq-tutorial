@@ -8,7 +8,9 @@ connection.on( 'ready' , function(){
   console.log('rabbit connected');
 	queue = connection.queue(
 		'task_queue',
-		{autoDelete:false},
+		{
+			autoDelete:false
+		},
 		function( q ) {
 			console.log( 'queue '+q.name+' defined. Wating for message...' );
 			/*******************
@@ -16,7 +18,10 @@ connection.on( 'ready' , function(){
 
 			********************/
 			q.subscribe(
-				{prefetchCount: 1},
+				{
+					prefetchCount: 1,
+					ack:true
+				},
 				function( message, headers, deliveryInfo, messageObj ) {
 					var data=message.data.toString('utf-8');
 					var sec=( data.split('.').length-1 );
@@ -24,6 +29,7 @@ connection.on( 'ready' , function(){
 					setTimeout(
 						function(){
 							console.log('[x] Done');
+              q.shift();
 						},
 						( sec * 1000 )
 					);
