@@ -7,3 +7,6 @@ http://www.rabbitmq.com/tutorials/tutorial-one-php.html
 
 ##tutorial2 - "Work queues"
 http://www.rabbitmq.com/tutorials/tutorial-two-php.html
+
+##tutorial3 - "Publish/Subscribe"
+http://www.rabbitmq.com/tutorials/tutorial-three-php.html
