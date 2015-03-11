@@ -6,33 +6,27 @@ var connection = amqp.createConnection( {host:'localhost'} );
 connection.on( 'ready' , function (){
     console.log( 'rabbit connected...' );
 
-    var data = process.argv[2] || 'Hello rabbit!';
+    var severity = process.argv[2] || 'info';
+    var data = (process.argv.length>2) ? process.argv.slice( 3 ).join(' ') : 'Hello rabbit!';
 
-    //declare exchange
+    //declare "direct_logs" exchange
     var exc = connection.exchange(
-        'logs',
+        'direct_logs',
         {
-            type:'fanout',
+            type:'direct',
             autoDelete:false
         },
         function (exchange) {
-            console.log('callback:ExchangeOpen ' + exchange.name + ' is open');
-            exchange.publish( '', data );
-            console.log('message published');
+            console.log('Exchange ' + exchange.name + ' is open');
+            exchange.publish( severity, data );
+            console.log('-- message published:',severity, data);
         }
     );
-    exc.on('error',function(e){
-        console.log('[x]exchangeError:',e);
-    });
-    exc.on('open',function(){
-        console.log('event:ExchangeOpen ' + this.name+' is open' );
-    });
 
     //Need timeout to send message complete
     setTimeout(function(){
-    connection.destroy();
+        connection.destroy();
     },100);
-
 });
 
 connection.on( 'error' , function(e){

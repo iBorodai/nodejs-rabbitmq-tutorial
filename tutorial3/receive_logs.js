@@ -17,9 +17,8 @@ connection.on( 'ready' , function (){
           console.log('Exchange ' + exchange.name + ' is open');
         }
     );
+    exc.on('error', function(e){console.log('[x]ExchangeError:',e);});
     exc.on('open', function(){
-        //TODO - declare tmp queue, bind to exchange, subscribe, receive messages
-
         //Declare queue {exclusive-true, auto_delete-false}
         connection.queue(
             '',
@@ -29,16 +28,18 @@ connection.on( 'ready' , function (){
             },
             function( q ){
                 console.log( 'queue '+q.name+' declired' );
-                q.bind( 'logs', '' );
-                console.log( '[x] wating for logs. To exit press CTRL+C' );
-
-                //$channel->basic_consume($queue_name, '', false, true, false, false, $callback);
-                //no_ack:true,
-                q.subscribe(
-                    function( message, headers, deliveryInfo, messageObj ){
-                        console.log( " [x] %s", message.data.toString('utf-8')  );
-                    }
-                )
+                //Binding queue to exchange
+                q.on('error',function(e){console.log('[x]ERROR:',e)});
+                q.on('queueBindOk',function(e){console.log('event:queueBindOk');});
+                q.bind( 'logs', '' ,function(queue){
+                    console.log( '[x] wating for logs. To exit press CTRL+C' );
+                    //no_ack:true - default
+                    queue.subscribe(
+                        function( message, headers, deliveryInfo, messageObj ){
+                            console.log( " [x] %s", message.data.toString('utf-8')  );
+                        }
+                    )
+                });
             }
         )
 
