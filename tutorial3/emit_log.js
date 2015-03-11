@@ -9,23 +9,18 @@ connection.on( 'ready' , function (){
     var data = process.argv[2] || 'Hello rabbit!';
 
     //declare exchange
-  var exc = connection.exchange(
+    var exc = connection.exchange(
         'logs',
         {
             type:'fanout',
             autoDelete:false
         },
         function (exchange) {
-          console.log('Exchange ' + exchange.name + ' is open');
+            console.log('Exchange ' + exchange.name + ' is open');
+            exchange.publish( '', data );
+            console.log('message published');
         }
     );
-  exc.on('open', function(){
-        connection.publish(
-            'task_queue',
-            data
-        );
-      console.log('message published');
-    });
 
     //Need timeout to send message complete
     setTimeout(function(){
