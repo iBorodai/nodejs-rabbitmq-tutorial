@@ -20,7 +20,11 @@ connection.on( 'ready' , function (){
         }
     );
   exc.on('open', function(){
-        //TODO - declare tmp queue, bind to exchange, subscribe, receive messages
+        connection.publish(
+            'task_queue',
+            data
+        );
+      console.log('message published');
     });
 
     //Need timeout to send message complete
