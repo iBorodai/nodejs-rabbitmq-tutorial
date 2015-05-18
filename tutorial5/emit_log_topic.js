@@ -6,27 +6,22 @@ var connection = amqp.createConnection( {host:'localhost'} );
 connection.on( 'ready' , function (){
     console.log( 'rabbit connected...' );
 
-    var data = process.argv[2] || 'Hello rabbit!';
-
-    //declare exchange
+    //declare "topic" exchange
     var exc = connection.exchange(
-        'logs',
+        'topic_logs',
         {
-            type:'fanout',
+            type:'topic',
             autoDelete:false
         },
         function (exchange) {
-            console.log('callback:ExchangeOpen ' + exchange.name + ' is open');
-            exchange.publish( '', data );
-            console.log('message published');
+            var routing_key = process.argv[2] || 'anonymous.info';
+            var data = (process.argv.length>2) ? process.argv.slice( 3 ).join(' ') : 'Hello rabbit!';
+
+            console.log('Exchange ' + exchange.name + ' is open');
+            exchange.publish( routing_key, data );
+            console.log('-- message published:',routing_key, data);
         }
     );
-    exc.on('error',function(e){
-        console.log('[x]exchangeError:',e);
-    });
-    exc.on('open',function(){
-        console.log('event:ExchangeOpen ' + this.name+' is open' );
-    });
 
     //Need timeout to send message complete
     setTimeout(function(){
