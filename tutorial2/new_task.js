@@ -13,9 +13,9 @@ connection.on( 'ready' , function (){
         data,
         {
             deliveryMode:2  //make message persistent
-    }
+        }
     );
-  console.log('message published');
+    console.log('message published');
 
     setTimeout(function(){
     connection.destroy();

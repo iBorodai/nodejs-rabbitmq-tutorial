@@ -13,10 +13,6 @@ connection.on( 'ready' , function(){
         },
         function( q ) {
             console.log( 'queue '+q.name+' defined. Wating for message...' );
-            /*******************
-            $channel->basic_qos(null, 1, null); //$prefetch_size, $prefetch_count, $a_global
-
-            ********************/
             q.subscribe(
                 {
                     prefetchCount: 1,
@@ -29,20 +25,27 @@ connection.on( 'ready' , function(){
                     setTimeout(
                         function(){
                             console.log('[x] Done');
-              q.shift();
+                            q.shift();
                         },
                         ( sec * 1000 )
                     );
                 }
-            );
-            q.on('basicQosOk',function(){
+            )
+            //q.on('basicQosOk',function(){ console.log('basicQosOk!!!'); }); Does not work :( -> https://github.com/postwait/node-amqp/issues/264
+            .once('error', function(error) {
+                console.log(error);
+            }).once('basicQosOk', function() {
+                //it is supposed it is emmited when subscription is ready, but...
+                //it seems is not working :(
+                //https://github.com/postwait/node-amqp/issues/264
+            }).addCallback(function subscribed(ok){
                 console.log('basicQosOk!!!');
             });
         }
     );
-  queue.on('error', function(e){
+    queue.on('error', function(e){
         console.log(e)
-    } );
+    });
 });
 connection.on( 'error' , function(e){ console.log( 'Error:', e ); } );
 connection.on( 'close' , function(){console.log( 'rabbit connection closed' ); }  );
