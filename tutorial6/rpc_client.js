@@ -44,18 +44,21 @@ connection.on( 'ready' , function (){
 
                 var number = process.argv[2] || 30;
                 number = parseInt(number);
+
 console.log('sending number:'+number);
+
                 connection.publish(
                     'rpc_queue',
                     ( ''+number ),
                     opts
-                    ,function( wasError ){
+                    ,
+                    function( wasError ){
                         if(!wasError) console.log( 'fibonachi RPC request sent' );
                         else console.log( 'sending error' );
                     }
                 );
+console.log('(after publish)');
             });
-
         }
     );
 }).on('error', function(err){

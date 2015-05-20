@@ -32,16 +32,15 @@ connection.on( 'ready' , function (){
                         //,replyTo: deliveryInfo.callbackQueueName
                     };
 
-                    connection.publish(
+                    var pres = connection.publish(
                         ''+deliveryInfo.replyTo,
                         ''+fibV,
-                        publishOpts,
-                        function(wasError){
-                            if(!wasError)
-                                console.log( 'sent back to '+deliveryInfo.callbackQueueName );
-                            q.shift();
-                        }
+                        publishOpts
+                        // callback newer called in this case, becouse defaultExchange has no <options.confirm> (and could not have, couse of it inited without any params... fuck!)
+                        //, function(wasError){ if(!wasError) console.log( 'sent back to '+deliveryInfo.callbackQueueName ); }
                     );
+                    //Just call shift without callbacks!
+                    q.shift();
                 }
             ).once('error', function onError(error) {
                 console.log(error);
@@ -54,12 +53,9 @@ connection.on( 'ready' , function (){
             });
         }
     )
-});
-
-connection.on( 'error' , function(e){
+}).on( 'error' , function(e){
     console.log( e.stack );
-});
-connection.on( 'close' , function(){
+}).on( 'close' , function(){
     console.log( 'rabbit connection closed' );
 });
 
