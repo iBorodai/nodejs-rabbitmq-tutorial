@@ -42,6 +42,7 @@ connection.on( 'ready' , function (){
                     //Just call shift without callbacks!
                     q.shift();
                 }
+
             ).once('error', function onError(error) {
                 console.log(error);
             }).once('basicQosOk', function subscribed() {
